@@ -1,0 +1,65 @@
+public class AnimalsCallouts {
+ 
+    public class Animal {
+       
+       public String idX;
+       public String name;
+       public String says;
+       public String eats;
+    
+    }
+
+    @future (callout=true)
+    public static void  getAnimal(Set<Id> id_s) {
+
+    Http http = new Http();
+
+    List<Animal__c> animals = [SELECT Name, Says__c, Eats__c, extId__c FROM Animal__c 
+                               WHERE Id =:id_s AND extId__c != null];
+    List<Animal__c> animalsForUpdate = new List<Animal__c>();
+        for(Animal__c an : animals) {
+             Animal anim = getAnimalById(an.extId__c, http);
+
+            if(anim.name != null && an.name != null ) {
+               anim.name=an.name;
+            }
+
+            if(an.Eats__c == null && anim.eats != null) {
+               an.Eats__c = anim.eats;
+            }
+
+           if(an.Says__c == null && anim.says != null) {
+               an.Says__c = anim.says;
+            }
+          
+           animalsForUpdate.add(an);
+        }
+    
+        if(animalsForUpdate.size()>0) {
+        Database.update(animalsForUpdate);
+    
+    }
+}
+
+     public static HttpRequest getRequestId(String Ids){
+        
+         HttpRequest result = new HttpRequest();
+      	 String endPoint = 'https://th-apex-http-callout.herokuapp.com/animals/';
+  		 result.setEndpoint(endPoint + Ids);
+  		 result.setMethod('GET');
+      	 return result;
+    }
+
+    public static Animal getAnimalById(String Ids, Http http) {
+      
+      Animal animal;
+      HttpResponse response = http.send(getRequestId(Ids));
+        if(response.getStatusCode() == 200) {
+            String body = response.getBody().replace('"id"','"idX"')
+                          .replace('{"animal":','')
+                          .replace('}}','}');
+            animal = (Animal)JSON.deserialize(body, Animal.class);
+        } 
+      return animal;
+      }
+    }
