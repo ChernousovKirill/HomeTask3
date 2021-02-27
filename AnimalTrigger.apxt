@@ -1,6 +1,7 @@
 trigger AnimalTrigger on Animal__c (after insert) {
  
-    if(Trigger.isAfter){
-       AnimalsCallouts.getAnimal(Trigger.newMap.keySet());
+    AnimalTriggerClass atc = new AnimalTriggerClass();
+    if(Trigger.isAfter) {
+       atc.getAnimals();
     }
 }
