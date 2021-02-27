@@ -1,20 +1,10 @@
+@isTest
 global class AnimalsCalloutMock {
-    private String reqbody;
-    private Integer statuscode;
-    
-    public AnimalsCalloutMock(String reqbody, Integer statuscode){
-        this.reqbody = reqbody;
-        this.statuscode = statuscode;
+    global HTTPResponse respond(HTTPRequest req) {
+    HttpResponse response = new HttpResponse();
+    response.setHeader('Content-Type', 'application/json');
+    response.setBody('{"animal":{"id":1,"name":"chicken","eats":"chicken food","says":"cluck cluck"}}');
+    response.setStatusCode(200);
+    return response;
     }
-    
-    global HTTPResponse respond(HTTPRequest req){
-        
-        HttpResponse res = new HttpResponse();
-        res.setHeader('Content-Type', 'application/json');
-        res.setBody(reqbody);
-        res.setStatusCode(statuscode);
-        return res;
-
-    }
-
 }
