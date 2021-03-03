@@ -3,16 +3,20 @@ public class futureAnimalsCallouts {
    @future(callout = true)
     public static void fillAnimalsFields(List<Integer> animalId) {
  
-    Map<Integer,AnimalModel> result = AnimalsCallouts.getMapWitAnimals(animalId);
+    Map<Integer,Animal__c> result = AnimalsCallouts.getMapWitAnimals(animalId);
 
         List<Animal__c> animalsForUpdate = [SELECT extId__c,Name, Eats__c, Says__c FROM Animal__c WHERE extId__c IN : result.keySet()];
         for(Animal__c anim : animalsForUpdate) {
-            AnimalModel mod = result.get(anim.extId__c.intValue());
-            anim.Eats__c = mod.animalModel.eats;
-            anim.Says__c = mod.animalModel.says;
-            anim.Name = mod.animalModel.name;
+            Animal__c mod = result.get(anim.extId__c.intValue());
+            anim.Eats__c = mod.eats__c;
+            anim.Says__c = mod.says__c;
+            anim.Name = mod.name;
 
         }
          update animalsForUpdate;
     }
+
+ 
+
+    
 }
