@@ -7,4 +7,14 @@ public class AnimalModel {
 		public String eats;	
 		public String says;
     }
+
+    public static Animal__c createAnimal(String animalString) {
+       AnimalModel anim = (AnimalModel)  JSON.deserialize(animalString, AnimalModel.class);
+       Animal__c animal = new Animal__c();
+        animal.Eats__c = anim.animalModel.eats;
+        animal.Says__c = anim.animalModel.says;
+        animal.Name = anim.animalModel.name;
+        return animal;
+    }
+ 
 }
