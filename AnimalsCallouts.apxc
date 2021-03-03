@@ -9,11 +9,11 @@ public class AnimalsCallouts {
        	return response;
     }
 
-    public static Map<Integer,AnimalModel> getMapWitAnimals(List<Integer> animalId) {
-        Map<Integer,AnimalModel> result = new Map<Integer,AnimalModel>();       
+    public static Map<Integer,Animal__c> getMapWitAnimals(List<Integer> animalId) {
+        Map<Integer,Animal__c> result = new Map<Integer,Animal__c>();       
          for (Integer ids : animalId) {
              HttpResponse response = getAnimal(ids);
-             AnimalModel animal = (AnimalModel) JSON.deserialize(response.getBody(), AnimalModel.class);
+             Animal__c animal = AnimalModel.createAnimal(response.getBody());
              result.put(ids,animal);
          }
          return result;
